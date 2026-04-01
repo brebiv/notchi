@@ -1,13 +1,13 @@
 import AppKit
 
 enum NotchiTask: String, CaseIterable {
-    case idle, working, sleeping, compacting, waiting
+    case idle, working, sleeping, compacting, waiting, reading
 
     var animationFPS: Double {
         switch self {
         case .compacting: return 6.0
         case .sleeping: return 2.0
-        case .idle, .waiting: return 3.0
+        case .idle, .waiting, .reading: return 3.0
         case .working: return 4.0
         }
     }
@@ -18,6 +18,7 @@ enum NotchiTask: String, CaseIterable {
         switch self {
         case .sleeping:   return 4.0
         case .idle, .waiting: return 1.5
+        case .reading:    return 2.0
         case .working:    return 0.4
         case .compacting: return 0.5
         }
@@ -27,6 +28,7 @@ enum NotchiTask: String, CaseIterable {
         switch self {
         case .sleeping, .compacting: return 0
         case .idle:                  return 1.5
+        case .reading:               return 1.0
         case .waiting:               return 0.5
         case .working:               return 0.5
         }
@@ -34,7 +36,7 @@ enum NotchiTask: String, CaseIterable {
 
     var canWalk: Bool {
         switch self {
-        case .sleeping, .compacting, .waiting:
+        case .sleeping, .compacting, .waiting, .reading:
             return false
         case .idle, .working:
             return true
@@ -48,12 +50,13 @@ enum NotchiTask: String, CaseIterable {
         case .sleeping:   return "Sleeping"
         case .compacting: return "Compacting..."
         case .waiting:    return "Waiting..."
+        case .reading:    return "Reading..."
         }
     }
 
     var walkFrequencyRange: ClosedRange<Double> {
         switch self {
-        case .sleeping, .waiting: return 30.0...60.0
+        case .sleeping, .waiting, .reading: return 30.0...60.0
         case .idle:               return 8.0...15.0
         case .working:            return 5.0...12.0
         case .compacting:         return 15.0...25.0
@@ -123,4 +126,5 @@ struct NotchiState: Equatable {
     static let sleeping = NotchiState(task: .sleeping)
     static let compacting = NotchiState(task: .compacting)
     static let waiting = NotchiState(task: .waiting)
+    static let reading = NotchiState(task: .reading)
 }

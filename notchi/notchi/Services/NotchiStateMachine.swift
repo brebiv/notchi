@@ -134,7 +134,7 @@ final class NotchiStateMachine {
             session.updateProcessingState(isProcessing: true)
         }
 
-        if result.interrupted && session.task == .working {
+        if result.interrupted && (session.task == .working || session.task == .reading) {
             session.updateTask(.idle)
             session.updateProcessingState(isProcessing: false)
         } else if session.task == .waiting,

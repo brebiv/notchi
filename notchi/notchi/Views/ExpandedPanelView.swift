@@ -35,7 +35,7 @@ struct ExpandedPanelView: View {
     }
 
     private var showIndicator: Bool {
-        state.task == .working || state.task == .compacting || state.task == .waiting
+        state.task == .working || state.task == .compacting || state.task == .waiting || state.task == .reading
     }
 
     private var hasActivity: Bool {

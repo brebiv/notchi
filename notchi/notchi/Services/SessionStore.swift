@@ -87,6 +87,9 @@ final class SessionStore {
             if event.tool == "AskUserQuestion" {
                 session.updateTask(.waiting)
                 session.setPendingQuestions(Self.parseQuestions(from: event.toolInput))
+            } else if Self.readingTools.contains(event.tool ?? "") {
+                session.clearPendingQuestions()
+                session.updateTask(.reading)
             } else {
                 session.clearPendingQuestions()
                 session.updateTask(.working)
@@ -180,6 +183,10 @@ final class SessionStore {
             return PendingQuestion(question: questionText, header: header, options: options)
         }
     }
+
+    private static let readingTools: Set<String> = [
+        "Read", "Glob", "Grep", "WebSearch", "WebFetch", "LSP",
+    ]
 
     private static let localSlashCommands: Set<String> = [
         "/clear", "/help", "/cost", "/status",
